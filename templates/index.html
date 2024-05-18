@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForenSight</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js library -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/animated.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templatemo.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/fontawesome.css') }}">
+</head>
+<body>
+<header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <a href="#top" class="logo">
+                        <img src="/static/images/logo.png" alt="ForenSight">
+                    </a>
+                    <ul class="nav">
+                        <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
+                        <li class="scroll-to-section"><a href="#upload">Upload</a></li>
+                        <!-- <li class="scroll-to-section"><a href="#results">Results</a></li> -->
+                        <li class="scroll-to-section"><a href="#about">About</a></li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-6 align-self-center">
+                        <div class="left-content show-up header-text wow fadeInLeft" data-wow-duration="1s"
+                             data-wow-delay="1s">
+                            <div class="row">
+                                <div class="col-lg-11">
+                                    <h2>ForenSight: a Social Media Forensics Tool</h2>
+                                    <p>Welcome! Our platform is dedicated to enhancing online security by detecting and combating fake accounts on social media platforms. 
+                                        With our innovative tool, users can safeguard their online presence and contribute to the fight against misinformation and cyber threats.
+                                        Join us in creating a safer and more authentic digital environment.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+                            <img src="/static/images/slider-dec.png" alt="ForenSight App">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section id="upload">
+    <div class="services section" style="padding-top: 50px; padding-bottom: 10px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2">
+                    <div class="section-heading  wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s "style=" text-align: center;">
+                        <h4>Upload Your Data Files</h4>
+                        <img src="/static/images/heading-line-dec.png" alt="Heading Line">
+                        <p>To upload documents for analysis, please utilize the provided web scraping tools to gather data from social media platforms. 
+                            Once you have collected the necessary information, upload each file into its corresponding upload field below.
+                            Our system will automatically process the uploaded files and showcase the results in the designated section.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Form for file uploads -->
+    <div class="container">
+        <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="service-item second-service">
+                        <div class="icon"></div>
+                        <h4>Upload File 1</h4>
+                        <input type="file" name="file1" id="file1">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="service-item third-service">
+                        <div class="icon"></div>
+                        <h4>Upload File 2</h4>
+                        <input type="file" name="file2" id="file2">
+                    </div>
+                </div>
+            </div>
+            <div class="text-center" style="padding-top: 35px;">
+                <button type="button" class="btn btn-primary" onclick="uploadFiles()">Upload Files</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section id="results" {% if show_results %} style="display: block;" {% else %} style="display: none;" {% endif %}>
+    <!-- Your existing results section content -->
+    <div class="results section" style="padding-bottom: 50px;" >
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 align-self-center">
+                    <div class="section-heading">
+                        <h4>Results of ForenSight Analysis</h4>
+                        <img src="/static/images/heading-line-dec.png" alt="Heading Line">
+                        <br>
+                        <br>
+                        <!-- Download results link -->
+                        <br>
+                        <h5>Choose the fake account severity level</h5>
+                        <br>                       
+                        <!-- Form for selecting level to download -->
+                        <form id="downloadForm" action="/download" method="POST">
+                            <!-- <label for="level">Select Level:</label> -->
+                            <div class="dropdown-menu"> <!-- Add custom class for styling -->
+                                <select name="level" id="level">
+                                    <option value="Level 1 (0% fake)">Level 1 (0% fake)</option>
+                                    <option value="Level 2 (20% fake)">Level 2 (20% fake)</option>
+                                    <option value="Level 3 (40% fake)">Level 3 (40% fake)</option>
+                                    <option value="Level 4 (60% fake)">Level 4 (60% fake)</option>
+                                    <option value="Level 5 (80% fake)">Level 5 (80% fake)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Download</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="right-image" style="margin-top: 150px;">
+                        <!-- Doughnut Chart Canvas -->
+                        <canvas id="myDoughnutChart" width="500" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section id="about">
+    <!-- About Section Content -->
+    <div class="about section" style="padding-top: 50px; padding-bottom: 50px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2">
+                    <div class="section-heading wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
+                        <h4>About <em>ForenSight</em></h4>
+                        <img src="/static/images/heading-line-dec.png" alt="Heading Line">
+                        <p>ForenSight is a cutting-edge project aimed at detecting fake accounts on social media platforms such as Facebook.
+                            Our tool leverages automated algorithms and digital forensics techniques to identify suspicious patterns indicative of fraudulent profiles.
+                            Designed to address the growing issue of online misinformation and identity theft, ForenSight is invaluable for various users, including: </p>
+                        <p>• Marketing agencies seeking to ensure the authenticity of influencers and brand ambassadors.
+                            <br>
+                            • Facebook group owners interested in maintaining a trustworthy community environment.
+                            <br>
+                            • Individuals looking to protect themselves from cyber threats and online scams.</p>
+                        <p>Join us in our mission to create a safer and more transparent digital space for all users.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer id="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="copyright-text">
+                    <p>Copyright © 2024 School of Computing, Coventry University-Egypt Branch. All Rights Reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="/static/vendor/jquery/jquery.min.js"></script>
+<script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/static/assets/js/owl-carousel.js"></script>
+<script src="/static/assets/js/animation.js"></script>
+<script src="/static/assets/js/imagesloaded.js"></script>
+<script src="/static/assets/js/popup.js"></script>
+<script src="/static/assets/js/custom.js"></script>
+
+<script>
+// Function to handle file upload and display results
+function uploadFiles() {
+    var formData = new FormData();
+    formData.append('file1', $('#file1')[0].files[0]);
+    formData.append('file2', $('#file2')[0].files[0]);
+
+    $.ajax({
+        type: 'POST',
+        url: '/upload',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            // Log the response from the server
+            console.log(data);
+
+            // Show the results section
+            $('#results').show();
+
+            // Process and display doughnut chart
+            var ctx = document.getElementById('myDoughnutChart').getContext('2d');
+            var myDoughnutChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'Level 1 (0% fake)',
+                        'Level 2 (20% fake)',
+                        'Level 3 (40% fake)',
+                        'Level 4 (60% fake)',
+                        'Level 5 (80% fake)'
+                    ],
+                    datasets: [{
+                        data: [
+                            data.fake_probability_counts['Level 1 (0% fake)'],
+                            data.fake_probability_counts['Level 2 (20% fake)'],
+                            data.fake_probability_counts['Level 3 (40% fake)'],
+                            data.fake_probability_counts['Level 4 (60% fake)'],
+                            data.fake_probability_counts['Level 5 (80% fake)']
+                        ],
+                        backgroundColor: [
+                            'rgba(65, 184, 213, 1)', // Light Blue
+                            'rgba(252, 219, 225, 1)', // Light Pink
+                            'rgba(245, 155, 180, 1)', // Light Red
+                            'rgba(220, 38, 129, 1)', // Dark Pink
+                            'rgba(49, 53, 110, 1)', // Dark Blue
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: false, // Disable responsiveness
+                    maintainAspectRatio: false, // Disable aspect ratio
+                    width: 500, // Set width
+                    height: 300 // Set height
+                }
+            });
+        },
+        error: function () {
+            alert('An error occurred while uploading files.');
+        }
+    });
+}
+
+
+
+</script>
+
+</body>
+</html>
